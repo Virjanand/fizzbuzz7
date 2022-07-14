@@ -1,17 +1,14 @@
 package fizzbuzz;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
-
 public class FizzBuzz {
     public List<String> getNumbers(int from, int until) {
-        return IntStream.rangeClosed(from, until).mapToObj(number -> toFizzBuzz(number, () -> {
+        return IntStream.rangeClosed(from, until).mapToObj(number -> toFizzBuzz(number, Stream.of(() -> {
             if (number % 3 == 0) {
                 return "Fizz";
             }
@@ -21,11 +18,11 @@ public class FizzBuzz {
                 return "Buzz";
             }
             return "";
-        })).collect(Collectors.toList());
+        }))).collect(Collectors.toList());
     }
 
-    private String toFizzBuzz(int number, Supplier<String> fizzRule, Supplier<String> buzzRule) {
-        String result = Stream.of(fizzRule, buzzRule).map(Supplier::get).collect(Collectors.joining());
+    private String toFizzBuzz(int number, Stream<Supplier<String>> rules) {
+        String result = rules.map(Supplier::get).collect(Collectors.joining());
         if (result.isEmpty()) {
             return Integer.toString(number);
         }
