@@ -9,17 +9,25 @@ import java.util.stream.Stream;
 
 public class FizzBuzz {
     public List<String> getNumbers(int from, int until) {
-        return IntStream.rangeClosed(from, until).mapToObj(number -> toFizzBuzz(number, Stream.of(number1 -> {
+        return IntStream.rangeClosed(from, until).mapToObj(number -> toFizzBuzz(number, Stream.of(fizzRule(), buzzRule()))).collect(Collectors.toList());
+    }
+
+    private Function<Integer, String> fizzRule() {
+        return number1 -> {
             if (number1 % 3 == 0) {
                 return "Fizz";
             }
             return "";
-        }, number1 -> {
+        };
+    }
+
+    private Function<Integer, String> buzzRule() {
+        return number1 -> {
             if (number1 % 5 == 0) {
                 return "Buzz";
             }
             return "";
-        }))).collect(Collectors.toList());
+        };
     }
 
     private String toFizzBuzz(int number, Stream<Function<Integer, String>> rules) {
